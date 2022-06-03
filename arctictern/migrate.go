@@ -9,7 +9,7 @@ import (
 
 func Migrate(db *sql.DB, migrationDir string) error {
 	fmt.Println("🐦 Running migration...")
-	db.Exec(
+	_, err := db.Exec(
 		`
 		CREATE TABLE IF NOT EXISTS migration (
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -18,10 +18,16 @@ func Migrate(db *sql.DB, migrationDir string) error {
 		);
 		`,
 	)
-	files, _ := util.GetFiles(migrationDir)
+	if err != nil {
+		return err
+	}
+	files, err := util.GetFiles(migrationDir)
+	if err != nil {
+		return err
+	}
 	for _, file := range files {
 		version := fmt.Sprintf("V%v", util.GetVersion(file))
-		rows, _ := db.Query(
+		rows, err := db.Query(
 			`
 			SELECT id, version
 			FROM migration
@@ -30,17 +36,20 @@ func Migrate(db *sql.DB, migrationDir string) error {
 			`,
 			version,
 		)
+		if err != nil {
+			return err
+		}
 		if rows.Next() {
 			fmt.Printf("🐦 Running migration file %v: skipped\n", version)
 			continue
 		}
 		content, _ := util.LoadFile(file)
 		fmt.Printf("🐦 Running migration file %v: %v\n", version, file)
-		_, err := db.Exec(content)
+		_, err = db.Exec(content)
 		if err != nil {
 			return err
 		}
-		db.Exec(
+		_, err = db.Exec(
 			`
 			INSERT INTO migration (version)
 			VALUES (?)
@@ -48,6 +57,9 @@ func Migrate(db *sql.DB, migrationDir string) error {
 			`,
 			version,
 		)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
