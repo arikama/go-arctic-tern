@@ -1,8 +1,11 @@
 module github.com/arikama/go-arctic-tern
 
-go 1.17
+go 1.18
 
-require github.com/arikama/go-mysql-test-container v1.2.0
+require (
+	github.com/arikama/go-mysql-test-container v1.2.2
+	github.com/hooligram/kifu v1.2.3
+)
 
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
