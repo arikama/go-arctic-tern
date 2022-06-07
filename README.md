@@ -1,5 +1,5 @@
 # Arctic Tern
-[![Build Status](https://app.travis-ci.com/arikama/go-arctic-tern.svg?branch=master)](https://app.travis-ci.com/arikama/go-arctic-tern)
+[![build](https://github.com/arikama/go-arctic-tern/actions/workflows/build.yaml/badge.svg)](https://github.com/arikama/go-arctic-tern/actions/workflows/build.yaml)
 [![codecov](https://codecov.io/gh/arikama/go-arctic-tern/branch/master/graph/badge.svg?token=xTbyaIEFCN)](https://codecov.io/gh/arikama/go-arctic-tern)
 
 ![Arctic Tern](./arctic_tern.jpeg)
