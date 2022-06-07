@@ -8,10 +8,11 @@ import (
 )
 
 func TestMigrate(t *testing.T) {
-	db, err := mysqltestcontainer.Start("test", "")
+	result, err := mysqltestcontainer.Start("test")
 	if err != nil {
 		panic(err)
 	}
+	db := result.Db
 	migrationDir := "./../migration/example"
 	err = arctictern.Migrate(db, migrationDir)
 	if err != nil {
@@ -24,10 +25,11 @@ func TestMigrate(t *testing.T) {
 }
 
 func TestMigrateInvalid(t *testing.T) {
-	db, err := mysqltestcontainer.Start("test", "")
+	result, err := mysqltestcontainer.Start("test")
 	if err != nil {
 		panic(err)
 	}
+	db := result.Db
 	migrationDir := "./../migration/invalid"
 	err = arctictern.Migrate(db, migrationDir)
 	if err != nil && err.Error() != "Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INVALID' at line 1" {

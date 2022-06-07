@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/arikama/go-mysql-test-container/util"
 	"github.com/hooligram/kifu"
 )
 
@@ -19,13 +18,13 @@ func Migrate(db *sql.DB, migrationDir string) error {
 		);
 		`,
 	)
-	files, err := util.GetFiles(migrationDir)
+	files, err := GetFiles(migrationDir)
 	if err != nil {
 		panic(err.Error())
 	}
 	kifu.Info("Found %v files in %v", len(files), migrationDir)
 	for i, file := range files {
-		version := fmt.Sprintf("V%v", util.GetVersion(file))
+		version := fmt.Sprintf("V%v", GetVersion(file))
 		rows, _ := db.Query(
 			`
 			SELECT id, version
@@ -39,7 +38,7 @@ func Migrate(db *sql.DB, migrationDir string) error {
 			kifu.Info("Running migration file %v: skipped", version)
 			continue
 		}
-		content, _ := util.LoadFile(file)
+		content, _ := LoadFile(file)
 		kifu.Info("Running migration file #%v: %v", i+1, file)
 		_, err := db.Exec(content)
 		if err != nil {

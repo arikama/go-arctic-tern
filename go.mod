@@ -3,8 +3,8 @@ module github.com/arikama/go-arctic-tern
 go 1.18
 
 require (
-	github.com/arikama/go-mysql-test-container v1.2.2
-	github.com/hooligram/kifu v1.2.3
+	github.com/arikama/go-mysql-test-container v1.2.4
+	github.com/hooligram/kifu v1.2.4
 )
 
 require (
