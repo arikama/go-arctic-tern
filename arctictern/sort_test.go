@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/arikama/go-arctic-tern/arctictern"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestByFileVersion(t *testing.T) {
@@ -26,8 +27,6 @@ func TestByFileVersion(t *testing.T) {
 	}
 	sort.Sort(files)
 	for i := 0; i < len(expected); i++ {
-		if files[i] != expected[i] {
-			t.Errorf("Got %v, expected %v\n", files[i], expected[i])
-		}
+		assert.Equal(t, expected[i], files[i])
 	}
 }

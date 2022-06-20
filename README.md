@@ -21,13 +21,10 @@ package main
 
 import (
 	"github.com/arikama/go-arctic-tern/arctictern"
-	"github.com/arikama/go-mysql-test-container/mysqltestcontainer"
 )
 
 func main() {
-	db, _ := mysqltestcontainer.Start("test", "")
-	migrationDir := "./migration/example"
-	arctictern.Migrate(db, migrationDir)
+	arctictern.Migrate(db, "./migration/example")
+	arctictern.Seed(db, "./seed/example")
 }
-
 ```

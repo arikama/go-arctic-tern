@@ -5,34 +5,34 @@ import (
 
 	"github.com/arikama/go-arctic-tern/arctictern"
 	"github.com/arikama/go-mysql-test-container/mysqltestcontainer"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMigrate(t *testing.T) {
 	result, err := mysqltestcontainer.Start("test")
-	if err != nil {
-		panic(err)
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
 	db := result.Db
 	migrationDir := "./../migration/example"
 	err = arctictern.Migrate(db, migrationDir)
-	if err != nil {
-		panic(err)
-	}
+	assert.Nil(t, err)
+
 	err = arctictern.Migrate(db, migrationDir)
-	if err != nil {
-		panic(err)
-	}
+	assert.Nil(t, err)
 }
 
 func TestMigrateInvalid(t *testing.T) {
 	result, err := mysqltestcontainer.Start("test")
-	if err != nil {
-		panic(err)
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
 	db := result.Db
 	migrationDir := "./../migration/invalid"
 	err = arctictern.Migrate(db, migrationDir)
-	if err != nil && err.Error() != "Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INVALID' at line 1" {
-		panic(err)
-	}
+	assert.NotNil(t, err)
+	assert.Equal(t,
+		"Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INVALID' at line 1",
+		err.Error(),
+	)
 }
