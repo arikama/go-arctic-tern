@@ -1,1 +1,1 @@
-go test ./... -cover -v -coverprofile=coverage.txt
+go test ./... -cover -coverprofile=coverage.txt

@@ -7,18 +7,18 @@ import (
 	"github.com/hooligram/kifu"
 )
 
-func Migrate(db *sql.DB, migrationDir string) error {
-	kifu.Info("Running migration: dir=%v", migrationDir)
+func Seed(db *sql.DB, seedDir string) error {
+	kifu.Info("Running seed: dir=%v", seedDir)
 	db.Exec(
 		`
-		CREATE TABLE IF NOT EXISTS migration (
+		CREATE TABLE IF NOT EXISTS seed (
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			version VARCHAR(64) NOT NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
 	)
-	files, err := GetFiles(migrationDir)
+	files, err := GetFiles(seedDir)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -28,7 +28,7 @@ func Migrate(db *sql.DB, migrationDir string) error {
 		rows, _ := db.Query(
 			`
 			SELECT id, version
-			FROM migration
+			FROM seed
 			WHERE version = ?
 			;
 			`,
@@ -48,13 +48,13 @@ func Migrate(db *sql.DB, migrationDir string) error {
 		}
 		db.Exec(
 			`
-			INSERT INTO migration (version)
+			INSERT INTO seed (version)
 			VALUES (?)
 			;
 			`,
 			version,
 		)
 	}
-	kifu.Info("Migration done: files=%v, skipped=%v", len(files), skipped)
+	kifu.Info("Seed done: files=%v, skipped=%v", len(files), skipped)
 	return nil
 }
