@@ -69,3 +69,22 @@ func TestSeedMissing(t *testing.T) {
 		err.Error(),
 	)
 }
+
+func TestSeedStress(t *testing.T) {
+	result, err := mysqltestcontainer.Start("test")
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	err = arctictern.Migrate(result.Db, "./../migration/stress")
+	assert.Nil(t, err)
+
+	err = arctictern.Seed(result.Db, "./../seed/stress")
+	assert.Nil(t, err)
+
+	rows, err := result.Db.Query("SELECT COUNT(*) FROM user;")
+	assert.Nil(t, err)
+	rows.Next()
+	var count int
+	rows.Scan(&count)
+	assert.Equal(t, 2000, count)
+}
