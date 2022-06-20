@@ -20,7 +20,7 @@ func Seed(db *sql.DB, seedDir string) error {
 	)
 	files, err := GetFiles(seedDir)
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	skipped := 0
 	for _, file := range files {

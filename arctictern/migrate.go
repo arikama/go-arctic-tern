@@ -20,7 +20,7 @@ func Migrate(db *sql.DB, migrationDir string) error {
 	)
 	files, err := GetFiles(migrationDir)
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	skipped := 0
 	for _, file := range files {

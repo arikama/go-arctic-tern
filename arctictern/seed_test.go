@@ -37,3 +37,35 @@ func TestSeed(t *testing.T) {
 	}
 	assert.Equal(t, 3, count)
 }
+
+func TestSeedInvalid(t *testing.T) {
+	result, err := mysqltestcontainer.Start("test")
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	err = arctictern.Migrate(result.Db, "./../migration/example")
+	assert.Nil(t, err)
+
+	err = arctictern.Seed(result.Db, "./../seed/invalid")
+	assert.NotNil(t, err)
+	assert.Equal(t,
+		`Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INVALID' at line 1`,
+		err.Error(),
+	)
+}
+
+func TestSeedMissing(t *testing.T) {
+	result, err := mysqltestcontainer.Start("test")
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	err = arctictern.Migrate(result.Db, "./../migration/example")
+	assert.Nil(t, err)
+
+	err = arctictern.Seed(result.Db, "./../seed/missing")
+	assert.NotNil(t, err)
+	assert.Equal(t,
+		`open ./../seed/missing: no such file or directory`,
+		err.Error(),
+	)
+}

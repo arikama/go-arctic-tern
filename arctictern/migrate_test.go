@@ -36,3 +36,16 @@ func TestMigrateInvalid(t *testing.T) {
 		err.Error(),
 	)
 }
+
+func TestMigrateMissing(t *testing.T) {
+	result, err := mysqltestcontainer.Start("test")
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	err = arctictern.Migrate(result.Db, "./../migration/missing")
+	assert.NotNil(t, err)
+	assert.Equal(t,
+		"open ./../migration/missing: no such file or directory",
+		err.Error(),
+	)
+}
